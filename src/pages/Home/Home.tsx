@@ -1,19 +1,11 @@
-import { HeaderHome } from "../../components/HeaderHome/HeaderHome"
+import { HeaderHome } from "../../components/HeaderHome/HeaderHome";
+import { HeroHome } from "../../components/HeroHome/HeroHome";
 
-
-export const Home = () =>{
-
-  return(
-
+export const Home = () => {
+  return (
     <>
-
-      <header>
-
-          <HeaderHome />
-
-      </header>
-
-      
+      <HeaderHome />
+      <HeroHome />
     </>
-  )
-}
+  );
+};

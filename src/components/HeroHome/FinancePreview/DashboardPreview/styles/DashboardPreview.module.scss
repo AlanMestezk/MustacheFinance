@@ -1,0 +1,66 @@
+@use "../../../../../styles/variables" as *;
+
+.preview {
+  width: 100%;
+  max-width: 480px;
+  padding: 32px;
+
+  background-color: $color-secondary;
+
+  border: 1px solid rgba($color-white, 0.08);
+  border-radius: $border-radius-lg;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.label {
+  color: $color-muted;
+
+  font-size: 14px;
+}
+
+.balance {
+  color: $color-white;
+
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat {
+  padding: 16px;
+
+  background-color: rgba($color-primary, 0.5);
+
+  border-radius: $border-radius-md;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statLabel {
+  color: $color-muted;
+
+  font-size: 13px;
+}
+
+.statValue {
+  color: $color-white;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.statValuePositive {
+  color: $color-accent;
+}

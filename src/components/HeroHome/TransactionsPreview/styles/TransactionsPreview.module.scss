@@ -1,0 +1,56 @@
+@use "../../../../styles/variables" as *;
+
+.preview {
+  width: 100%;
+  max-width: 480px;
+  min-height: 220px;
+
+  padding: 32px;
+
+  box-sizing: border-box;
+
+  background-color: $color-secondary;
+
+  border: 1px solid rgba($color-white, 0.08);
+  border-radius: $border-radius-lg;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.label {
+  margin-bottom: 4px;
+
+  color: $color-muted;
+
+  font-size: 14px;
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 14px;
+
+  border-bottom: 1px solid rgba($color-white, 0.06);
+
+  color: $color-white;
+
+  font-size: 15px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.income {
+  color: $color-accent;
+}
+
+.expense {
+  color: $color-white;
+}

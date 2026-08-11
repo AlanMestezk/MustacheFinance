@@ -1,0 +1,59 @@
+@use "../../../../styles/variables" as *;
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.eyebrow {
+  color: $color-accent;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.title {
+  color: $color-white;
+
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1px;
+
+  span {
+    color: $color-accent;
+  }
+}
+
+.description {
+  max-width: 520px;
+
+  color: $color-muted;
+
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.button {
+  padding: 14px 28px;
+
+  background-color: $color-accent;
+  color: $color-primary;
+
+  border: none;
+  border-radius: $border-radius-sm;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  transition:
+    background-color $transition-fast,
+    transform $transition-fast;
+
+  &:hover {
+    background-color: $color-accent-hover;
+    transform: translateY(-2px);
+  }
+}

@@ -1,0 +1,31 @@
+src/
+├── assets/
+│   └── logo/
+│       └── mustache-finance.png
+│
+├── components/
+│   ├── Header/
+│   ├── Sidebar/
+│   └── ...
+│
+├── pages/
+│   ├── Login/
+│   │   └── Login.tsx
+│   ├── Register/
+│   │   └── Register.tsx
+│   ├── Dashboard/
+│   │   └── Dashboard.tsx
+│   ├── Transactions/
+│   │   └── Transactions.tsx
+│   ├── Accounts/
+│   │   └── Accounts.tsx
+│   └── Settings/
+│       └── Settings.tsx
+│
+├── routes/
+│   └── index.tsx
+│
+├── App.tsx
+├── App.css
+├── index.css
+└── main.tsxS

@@ -13,7 +13,7 @@ export const GoalsPreview = () => {
 
       <div className={styles.amount}>
         <span>R$ 3.900</span>
-        <span>de R$ 5.000</span>
+        <span>de R$ 7.000</span>
       </div>
 
       <div className={styles.progress}>

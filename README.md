@@ -58,3 +58,7 @@ O projeto está atualmente em desenvolvimento.
 - Autenticação
 - Deploy
 
+<<<<<<< HEAD
+=======
+---
+>>>>>>> de9f9c76fc3ea83cc93fcae0befff42c27f88d39

@@ -24,7 +24,7 @@ export const TransactionsPreview = () => {
       </div>
 
       <div className={styles.transaction}>
-        <span>Netflix</span>
+        <span>Streaming</span>
 
         <strong className={styles.expense}>
           - R$ 39,90

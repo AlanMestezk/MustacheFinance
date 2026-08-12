@@ -1,0 +1,81 @@
+
+@use "../../../../../styles/variables" as *;
+
+.message {
+  width: 100%;
+  max-width: 700px;
+
+  margin: 20px auto 40px;
+
+  text-align: center;
+
+  opacity: 0;
+  transform: translateY(40px);
+
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mustache {
+  margin-bottom: 20px;
+
+  color: $color-gold;
+
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -4px;
+}
+
+h2 {
+  margin: 0;
+
+  color: $color-white;
+
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -1px;
+
+  span {
+    color: $color-gold;
+  }
+}
+
+p {
+  margin: 22px 0 28px;
+
+  color: rgba($color-white, 0.6);
+
+  font-size: 17px;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+
+  padding: 14px 28px;
+
+  background: $color-accent;
+  color: #06182d;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+}

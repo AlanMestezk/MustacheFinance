@@ -1,0 +1,41 @@
+@use "../../../styles/variables" as *;
+
+.navigation {
+  display: flex;
+
+  gap: 100px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  h3 {
+    margin: 0 0 8px;
+
+    color: $color-white;
+
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  a {
+    color: rgba($color-white, 0.55);
+
+    font-size: 14px;
+
+    text-decoration: none;
+
+    transition:
+      color 0.3s ease,
+      transform 0.3s ease;
+
+    &:hover {
+      color: $color-gold;
+
+      transform: translateX(3px);
+    }
+  }
+}

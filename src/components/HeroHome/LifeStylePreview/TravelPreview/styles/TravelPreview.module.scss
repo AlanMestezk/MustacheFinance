@@ -1,0 +1,86 @@
+@use "../../../../../styles/variables" as *;
+
+
+.preview {
+  width: 100%;
+  max-width: 1400px;
+
+  margin: 0 auto;
+  padding: 40px 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 100px;
+}
+
+.imageWrapper {
+  width: 50%;
+
+  opacity: 0;
+  transform: translateX(-120px);
+
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+
+.content {
+  width: 40%;
+
+  opacity: 0;
+  transform: translateX(120px);
+
+  transition:
+    opacity 0.9s ease 0.1s,
+    transform 0.9s ease 0.1s;
+}
+
+.visible {
+  .imageWrapper {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .content {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.image {
+  width: 100%;
+  max-width: 700px;
+
+  display: block;
+
+  border-radius: 20px;
+}
+
+.content {
+  h2 {
+    margin: 0;
+
+    color: $color-white;
+
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1.05;
+    font-weight: 800;
+
+    span {
+      color: $color-gold;
+    }
+  }
+
+  p {
+    max-width: 420px;
+
+    margin: 24px 0 0;
+
+    color: rgba($color-white, 0.6);
+
+    font-size: 17px;
+    line-height: 1.7;
+  }
+}

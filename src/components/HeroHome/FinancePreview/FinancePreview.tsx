@@ -5,7 +5,7 @@ import { GoalsPreview } from "./GoalsPreview/GoalsPreview";
 
 
 import styles from "./styles/FinancePreview.module.scss";
-import { TransactionsPreview } from "../TransactionsPreview/TransactionsPreview";
+import { TransactionsPreview } from "./TransactionsPreview/TransactionsPreview";
 
 export const FinancePreview = () => {
   const [currentSlide, setCurrentSlide] = useState(0);

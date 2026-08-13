@@ -84,3 +84,12 @@
     border-radius: 10px;
   }
 }
+
+//laptop
+
+@media (max-width: 1400px) and (min-width: 769px) {
+  .preview {
+    transform: scale(0.85);
+    transform-origin: center;
+  }
+}

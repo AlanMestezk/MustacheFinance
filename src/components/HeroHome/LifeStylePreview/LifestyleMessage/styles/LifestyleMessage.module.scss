@@ -23,13 +23,12 @@
 }
 
 .mustache {
-  margin-bottom: 20px;
+  width: 72px;
+  height: auto;
 
-  color: $color-gold;
+  display: block;
 
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -4px;
+  margin: 0 auto 20px;
 }
 
 h2 {

@@ -1,0 +1,38 @@
+.desktopHome {
+  display: block;
+}
+
+.mobileHome {
+  display: none;
+}
+
+/*LapTop*/
+
+@media (max-width: 768px) {
+  .desktopHome {
+    display: none;
+  }
+
+  .mobileHome {
+    display: block;
+  }
+}
+
+/* Laptop */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .desktopHome {
+    transform: scale(0.85);
+    transform-origin: top center;
+  }
+}
+
+/* Mobile */
+@media (max-width: 1300px) {
+  .desktopHome {
+    display: none;
+  }
+
+  .mobileHome {
+    display: block;
+  }
+}

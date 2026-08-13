@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
+import icon from "../../../../assets/logo/icon.png";
+
 import styles from "./styles/LifestyleMessage.module.scss";
 
 export const LifestyleMessage = () => {
@@ -33,7 +35,11 @@ export const LifestyleMessage = () => {
         isVisible ? styles.visible : ""
       }`}
     >
-      <div className={styles.mustache}>〰〰〰</div>
+      <img
+        src={icon}
+        alt=""
+        className={styles.mustache}
+      />
 
       <h2>
         Tudo isso começa

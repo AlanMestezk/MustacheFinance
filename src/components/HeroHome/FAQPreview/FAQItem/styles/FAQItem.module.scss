@@ -2,37 +2,26 @@
 
 .item {
   width: 100%;
-
-  border-bottom: 1px solid rgba($color-white, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .question {
   width: 100%;
+  padding: 28px 0;
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
-  padding: 24px 0;
-
-  background: transparent;
+  background: none;
   border: none;
 
   color: $color-white;
 
-  font-family: inherit;
   font-size: 18px;
   font-weight: 600;
 
-  text-align: left;
-
   cursor: pointer;
-
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: $color-accent;
-  }
 }
 
 .icon {
@@ -41,36 +30,31 @@
   font-size: 28px;
   font-weight: 300;
 
-  line-height: 1;
-
-  transition: transform 0.2s ease;
+  transition: transform 0.5s ease;
 }
 
 .answer {
   max-height: 0;
-  opacity: 0;
   overflow: hidden;
 
-  padding: 0;
+  opacity: 0;
 
   transition:
     max-height 0.5s ease,
-    opacity 0.5s ease,
-    padding 0.5s ease;
-
-  p {
-    margin: 0;
-
-    color: rgba($color-white, 0.65);
-
-    font-size: 16px;
-    line-height: 1.6;
-  }
+    opacity 0.5s ease;
 }
 
-.open {
-  max-height: 200px;
-  opacity: 1;
+.answer p {
+  margin: 0;
+  padding: 0 0 28px;
 
-  padding: 0 0 24px;
+  color: rgba($color-white, 0.65);
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.answer.open {
+  max-height: 150px;
+  opacity: 1;
 }

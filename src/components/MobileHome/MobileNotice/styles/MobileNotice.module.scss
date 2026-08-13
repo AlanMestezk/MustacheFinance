@@ -1,0 +1,107 @@
+
+@use "../../../../styles/variables" as *;
+
+.notice {
+  min-height: 100vh;
+
+  padding: 60px 24px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background-color: $color-primary;
+
+  opacity: 0;
+  transform: translateY(30px);
+
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.logo {
+  width: 300px;
+  height: auto;
+
+  margin-bottom: 30px;
+}
+
+.icon {
+  width: 42px;
+  height: auto;
+
+  margin-bottom: 22px;
+}
+
+h1 {
+  margin: 0;
+
+  color: $color-white;
+
+  font-size: clamp(32px, 9vw, 48px);
+  line-height: 1.05;
+  font-weight: 800;
+
+  span {
+    color: $color-gold;
+  }
+}
+
+.description {
+  max-width: 420px;
+
+  margin: 24px 0 30px;
+
+  color: rgba($color-white, 0.65);
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.desktopIcon {
+  width: 110px;
+  height: 80px;
+
+  margin: 10px 0 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid rgba($color-gold, 0.6);
+  border-radius: 12px;
+
+  background-color: rgba($color-gold, 0.05);
+
+  span {
+    font-size: 38px;
+  }
+}
+
+.future {
+  max-width: 420px;
+
+  margin: 0 0 28px;
+
+  color: rgba($color-white, 0.65);
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.comingSoon {
+  color: $color-gold;
+
+  font-size: 15px;
+  letter-spacing: 3px;
+}
+

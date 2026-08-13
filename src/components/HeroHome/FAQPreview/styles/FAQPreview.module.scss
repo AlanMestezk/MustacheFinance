@@ -19,3 +19,24 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+//laptop
+
+@media (max-width: 1400px) and (min-width: 769px) {
+  .faq {
+    max-width: 1000px;
+    padding: 60px 30px;
+  }
+}
+
+@media (max-width: 1400px) and (min-width: 769px) {
+  .hero {
+    min-height: 500px;
+
+    &__container {
+      max-width: 1050px;
+      padding: 60px 30px;
+      gap: 45px;
+    }
+  }
+}

@@ -1,7 +1,11 @@
+import { RegisterForm } from "../../components/RegisterForm/RegisterForm";
 
+import styles from "./styles/Register.module.scss";
 
 export const Register = () => {
   return (
-    <div>Register</div>
-  )
-}
+    <main className={styles.page}>
+      <RegisterForm />
+    </main>
+  );
+};

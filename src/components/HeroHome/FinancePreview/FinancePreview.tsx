@@ -1,34 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { DashboardPreview } from "./DashboardPreview/DashboardPreview";
 import { GoalsPreview } from "./GoalsPreview/GoalsPreview";
-
+import { TransactionsPreview } from "./TransactionsPreview/TransactionsPreview";
 
 import styles from "./styles/FinancePreview.module.scss";
-import { TransactionsPreview } from "./TransactionsPreview/TransactionsPreview";
 
 export const FinancePreview = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
-    <DashboardPreview />,
-    <GoalsPreview />,
-    <TransactionsPreview />,
+    <DashboardPreview key="dashboard" />,
+    <GoalsPreview key="goals" />,
+    <TransactionsPreview key="transactions" />,
   ];
 
   const nextSlide = () => {
-    setCurrentSlide((current) => (current + 1) % slides.length);
+    setCurrentSlide(
+      (current) => (current + 1) % slides.length
+    );
   };
 
   const previousSlide = () => {
     setCurrentSlide(
-      (current) => (current - 1 + slides.length) % slides.length
+      (current) =>
+        (current - 1 + slides.length) % slides.length
     );
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide(
+        (current) => (current + 1) % slides.length
+      );
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
   return (
     <div className={styles.preview}>
-
       <div className={styles.carousel}>
         <button
           className={styles.carousel__arrow}
@@ -63,7 +74,6 @@ export const FinancePreview = () => {
           />
         ))}
       </div>
-
     </div>
   );
 };

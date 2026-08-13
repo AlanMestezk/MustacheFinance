@@ -10,12 +10,13 @@ import { Settings } from "../pages/Settings/Settings";
 import { Account } from "../pages/Acounts/Acount";
 
 export const AppRoutes =()=> {
+
   return (
 
 
       <Routes>
 
-         <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
 
         <Route path="/login" element={<Login />} />
 
@@ -32,6 +33,7 @@ export const AppRoutes =()=> {
       </Routes>
 
   );
+  
 }
 
 export default AppRoutes;

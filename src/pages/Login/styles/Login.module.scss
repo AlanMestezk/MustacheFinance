@@ -1,0 +1,22 @@
+@use "../../../styles/variables" as *;
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 40px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: $color-primary;
+}
+
+//laptop
+
+@media (max-width: 1400px) and (min-width: 769px) {
+  .page {
+    padding: 40px 80px;
+  }
+}

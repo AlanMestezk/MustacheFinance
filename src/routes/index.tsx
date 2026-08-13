@@ -8,6 +8,7 @@ import { Dashboard } from "../pages/Dashboard/Dashboard";
 import { Transaction } from "../pages/Transactions/Transaction";
 import { Settings } from "../pages/Settings/Settings";
 import { Account } from "../pages/Acounts/Acount";
+import { ForgotPasswordForm } from "../components/ForgotPasswordForm/ForgotPasswordForm";
 
 export const AppRoutes =()=> {
 
@@ -29,6 +30,8 @@ export const AppRoutes =()=> {
         <Route path="/accounts" element={<Account />} />
 
         <Route path="/settings" element={<Settings />} />
+
+        <Route path="/forgot-password" element={<ForgotPasswordForm />} />
 
       </Routes>
 

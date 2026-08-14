@@ -1,0 +1,81 @@
+@use "../../../../styles/variables" as *;
+
+.navigation {
+  position: fixed;
+
+  top: 76px;
+  left: 0;
+
+  width: 240px;
+  height: calc(100vh - 76px);
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 28px 16px;
+
+  background-color: $color-secondary;
+
+  border-right: 1px solid
+    rgba($color-white, 0.08);
+
+  &__item {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px 16px;
+
+    border-radius: $border-radius-sm;
+
+    color: rgba(
+      $color-white,
+      0.6
+    );
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+      background-color $transition-fast,
+      color $transition-fast,
+      transform $transition-fast;
+
+    svg {
+      font-size: 21px;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      color: $color-white;
+
+      background-color: rgba(
+        $color-white,
+        0.05
+      );
+
+      transform: translateX(2px);
+    }
+  }
+
+  &__itemActive {
+    color: $color-accent;
+
+    background-color: rgba(
+      $color-accent,
+      0.08
+    );
+
+    &:hover {
+      color: $color-accent;
+
+      background-color: rgba(
+        $color-accent,
+        0.12
+      );
+    }
+  }
+}

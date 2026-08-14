@@ -9,6 +9,8 @@ import { Transaction } from "../pages/Transactions/Transaction";
 import { Settings } from "../pages/Settings/Settings";
 import { Account } from "../pages/Acounts/Acount";
 import { ForgotPasswordForm } from "../components/ForgotPasswordForm/ForgotPasswordForm";
+import { NewExpenseForm } from "../components/Dashboard/Expenses/NewExpenseForm";
+import { ExpenseList } from "../components/Dashboard/Expenses/ExpenseList";
 
 export const AppRoutes =()=> {
 
@@ -33,6 +35,11 @@ export const AppRoutes =()=> {
 
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
 
+        <Route path="/dashboard/expenses/new" element={<NewExpenseForm />}/>
+
+        <Route path="/dashboard/expenses" element={<ExpenseList />}/>
+
+        <Route  path="/dashboard/expenses/edit/:expenseId" element={<NewExpenseForm />}/>
       </Routes>
 
   );

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./styles/HeroContent.module.scss";
 
 export const HeroContent = () => {
@@ -18,9 +19,13 @@ export const HeroContent = () => {
         planeje seus objetivos financeiros.
       </p>
 
-      <button className={styles.button}>
+
+      <Link  
+        to="/register" 
+        className={styles.button}
+      >
         Começar agora
-      </button>
+      </Link>
     </div>
   );
 };

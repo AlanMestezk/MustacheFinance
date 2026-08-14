@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import icon from "../../../../assets/logo/icon.png";
 
 import styles from "./styles/LifestyleMessage.module.scss";
+import { Link } from "react-router-dom";
 
 export const LifestyleMessage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -50,9 +51,12 @@ export const LifestyleMessage = () => {
 
       <p>Planeje melhor. Viva melhor.</p>
 
-      <button type="button">
+      <Link  
+        to="/register" 
+        className={styles.button}
+      >
         Começar agora
-      </button>
+      </Link>
     </div>
   );
 };

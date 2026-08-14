@@ -14,7 +14,6 @@ export const LifestylePreview = () => {
       <ShoppingPreview />
       <FamilyPreview />
       <FuturePreview />
-
        <LifestyleCTA />
 
        <LifestyleMessage />

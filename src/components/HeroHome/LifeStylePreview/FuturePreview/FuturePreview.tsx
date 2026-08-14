@@ -21,7 +21,6 @@ export const FuturePreview = () => {
         threshold: 0.25,
       },
     );
-
     if (previewRef.current) {
       observer.observe(previewRef.current);
     }

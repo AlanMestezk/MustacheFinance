@@ -558,3 +558,178 @@
     font-weight: 700;
   }
 }
+
+.quickAction__income {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 12px 18px;
+
+  border: 1px solid
+    rgba($color-accent, 0.25);
+
+  border-radius: $border-radius-sm;
+
+  background-color: rgba(
+    $color-accent,
+    0.08
+  );
+
+  color: $color-accent;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color $transition-fast,
+    border-color $transition-fast,
+    transform $transition-fast;
+
+  svg {
+    font-size: 18px;
+  }
+
+  &:hover {
+    background-color: rgba(
+      $color-accent,
+      0.15
+    );
+
+    border-color: rgba(
+      $color-accent,
+      0.4
+    );
+
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.investments {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  overflow: hidden;
+
+  background-color: $color-secondary;
+
+  border: 1px solid
+    rgba($color-white, 0.07);
+
+  border-radius: $border-radius-md;
+
+  .sectionHeader {
+    padding: 20px 24px;
+
+    border-bottom: 1px solid
+      rgba($color-white, 0.07);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.investment {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 16px 20px;
+
+  border-bottom: 1px solid
+    rgba($color-white, 0.05);
+
+  transition:
+    background-color $transition-fast;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: rgba(
+      $color-white,
+      0.025
+    );
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background-color: rgba(
+      $color-accent,
+      0.08
+    );
+
+    font-size: 18px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    flex: 1;
+
+    min-width: 0;
+
+    strong {
+      overflow: hidden;
+
+      color: $color-white;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    span {
+      color: rgba(
+        $color-white,
+        0.4
+      );
+
+      font-size: 11px;
+    }
+  }
+
+  &__amount {
+    color: $color-accent;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+  }
+}
+
+.income__amount {
+  color: #5fd38a;
+
+  font-size: 14px;
+  font-weight: 700;
+}

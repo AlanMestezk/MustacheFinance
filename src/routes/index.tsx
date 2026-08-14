@@ -11,6 +11,11 @@ import { Account } from "../pages/Acounts/Acount";
 import { ForgotPasswordForm } from "../components/ForgotPasswordForm/ForgotPasswordForm";
 import { NewExpenseForm } from "../components/Dashboard/Expenses/NewExpenseForm";
 import { ExpenseList } from "../components/Dashboard/Expenses/ExpenseList";
+import { IncomeList } from "../components/Dashboard/Incomes/IncomeList";
+import { NewIncomeForm } from "../components/Dashboard/Incomes/NewIncomeForm";
+import { NewInvestmentForm } from "../components/Dashboard/Investments/NewInvestmentForm";
+import { InvestmentList } from "../components/Dashboard/Investments/InvestmentList";
+import { Reports } from "../components/Dashboard/Reports/Reports";
 
 export const AppRoutes =()=> {
 
@@ -39,7 +44,24 @@ export const AppRoutes =()=> {
 
         <Route path="/dashboard/expenses" element={<ExpenseList />}/>
 
-        <Route  path="/dashboard/expenses/edit/:expenseId" element={<NewExpenseForm />}/>
+        <Route
+          path="/dashboard/investments"
+          element={<InvestmentList />}
+        />
+        
+        <Route
+          path="/dashboard/reports"
+          element={<Reports />}
+        />
+
+        <Route path="/dashboard/incomes" element={<IncomeList />}/>
+
+        <Route path="/dashboard/investments/new" element={<NewInvestmentForm />} />
+
+        <Route path="/dashboard/incomes/new" element={<NewIncomeForm />}/>
+
+        <Route path="/dashboard/expenses/edit/:expenseId" element={<NewExpenseForm />}/>
+        
       </Routes>
 
   );

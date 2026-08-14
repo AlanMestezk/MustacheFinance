@@ -7,10 +7,13 @@
   left: 0;
 
   width: 240px;
+
   height: calc(100vh - 76px);
 
   display: flex;
   flex-direction: column;
+
+  box-sizing: border-box;
 
   padding: 28px 16px;
 
@@ -19,25 +22,40 @@
   border-right: 1px solid
     rgba($color-white, 0.08);
 
+  overflow: hidden;
+
   &__item {
+    width: 100%;
+
     display: flex;
     align-items: center;
 
     gap: 12px;
 
-    padding: 13px 16px;
+    padding: 12px 16px;
 
+    margin-bottom: 4px;
+
+    box-sizing: border-box;
+
+    border: none;
     border-radius: $border-radius-sm;
+
+    background: transparent;
 
     color: rgba(
       $color-white,
-      0.6
+      0.65
     );
 
+    font-family: inherit;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
 
+    text-align: left;
     text-decoration: none;
+
+    cursor: pointer;
 
     transition:
       background-color $transition-fast,
@@ -45,17 +63,18 @@
       transform $transition-fast;
 
     svg {
-      font-size: 21px;
+      font-size: 20px;
+
       flex-shrink: 0;
     }
 
     &:hover {
-      color: $color-white;
-
       background-color: rgba(
-        $color-white,
-        0.05
+        $color-accent,
+        0.08
       );
+
+      color: $color-white;
 
       transform: translateX(2px);
     }
@@ -76,6 +95,51 @@
         $color-accent,
         0.12
       );
+    }
+  }
+
+  /*
+   * Empurra o botão Sair
+   * para o final da sidebar
+   */
+  &__spacer {
+    flex: 1;
+  }
+
+  /*
+   * Botão Sair
+   */
+  &__logout {
+    margin-top: 12px;
+
+    padding-top: 16px;
+    padding-bottom: 16px;
+
+    border-top: 1px solid
+      rgba($color-white, 0.07);
+
+    border-radius: 0;
+
+    color: rgba(
+      $color-white,
+      0.45
+    );
+
+    &:hover {
+      background-color: rgba(
+        255,
+        93,
+        93,
+        0.08
+      );
+
+      color: #ff7777;
+
+      transform: none;
+    }
+
+    svg {
+      font-size: 20px;
     }
   }
 }

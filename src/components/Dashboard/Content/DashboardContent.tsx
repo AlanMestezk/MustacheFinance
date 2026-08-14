@@ -7,7 +7,13 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import { auth } from "../../../firebase/auth";
 
-import { getUserExpenses } from "../../../firebase/firestore";
+import {
+  getUserExpenses,
+  getUserIncomes,
+  getUserInvestments,
+} from "../../../firebase/firestore";
+
+import { MdAdd } from "react-icons/md";
 
 interface Expense {
   id: string;
@@ -20,314 +26,878 @@ interface Expense {
   };
 }
 
+interface Income {
+  id: string;
+  description: string;
+  amount: number;
+  category: string;
+  date: {
+    seconds: number;
+    nanoseconds: number;
+  };
+}
+
+interface Investment {
+  id: string;
+  description: string;
+  amount: number;
+  goalAmount?: number;
+  category: string;
+  date: {
+    seconds: number;
+    nanoseconds: number;
+  };
+}
+
 export const DashboardContent = () => {
+  const [recentExpenses, setRecentExpenses] =
+    useState<Expense[]>([]);
 
-    const [recentExpenses, setRecentExpenses] =
-        useState<Expense[]>([]);
+  const [recentIncomes, setRecentIncomes] =
+    useState<Income[]>([]);
 
-    const navigate = useNavigate();
+  const [recentInvestments, setRecentInvestments] =
+    useState<Investment[]>([]);
 
-    
+  const [totalIncome, setTotalIncome] =
+    useState(0);
 
-    const formatCurrency = (
-        value: number,
-        ) => {
-        return value.toLocaleString(
-            "pt-BR",
-            {
-            style: "currency",
-            currency: "BRL",
-            },
-        );
+  const [totalExpenses, setTotalExpenses] =
+    useState(0);
+
+  const navigate = useNavigate();
+
+  const formatCurrency = (
+    value: number,
+  ) => {
+    return value.toLocaleString(
+      "pt-BR",
+      {
+        style: "currency",
+        currency: "BRL",
+      },
+    );
+  };
+
+  const getCategoryIcon = (
+    category: string,
+  ) => {
+    const icons: Record<
+      string,
+      string
+    > = {
+      Alimentação: "🍔",
+      Transporte: "🚗",
+      Casa: "🏠",
+      Lazer: "🎮",
+      Compras: "🛍️",
+      Saúde: "💊",
+      Educação: "📚",
+      Contas: "💳",
+
+      // Planejamentos
+      Veículo: "🏍️",
+      Viagem: "✈️",
+      Tecnologia: "💻",
+
+      Outros: "📦",
     };
 
-    const getCategoryIcon = (
-        category: string,
-        ) => {
-        const icons: Record<string, string> = {
-            Alimentação: "🍔",
-            Transporte: "🚗",
-            Casa: "🏠",
-            Lazer: "🎮",
-            Compras: "🛍️",
-            Saúde: "💊",
-            Educação: "📚",
-            Contas: "💳",
-            Outros: "📦",
-        };
+    return (
+      icons[category] || "📦"
+    );
+  };
 
-        return icons[category] || "📦";
-        };
+  const formatDate = (
+    timestamp: Expense["date"],
+  ) => {
+    if (!timestamp) return "";
 
-    const formatDate = (
-            timestamp: Expense["date"],
-            ) => {
-            if (!timestamp) return "";
+    return new Date(
+      timestamp.seconds * 1000,
+    ).toLocaleDateString(
+      "pt-BR",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      },
+    );
+  };
 
-            return new Date(
-                timestamp.seconds * 1000,
-            ).toLocaleDateString(
-                "pt-BR",
-                {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-                },
+  useEffect(() => {
+    const unsubscribe =
+      onAuthStateChanged(
+        auth,
+        async (user) => {
+          if (!user) return;
+
+          try {
+            const [
+              expenses,
+              incomes,
+              investments,
+            ] = await Promise.all([
+              getUserExpenses(
+                user.uid,
+              ),
+              getUserIncomes(
+                user.uid,
+              ),
+              getUserInvestments(
+                user.uid,
+              ),
+            ]);
+
+            const expenseData =
+              expenses as Expense[];
+
+            const incomeData =
+              incomes as Income[];
+
+            const investmentData =
+              investments as Investment[];
+
+            setRecentExpenses(
+              expenseData.slice(0, 3),
             );
-        };
 
-    useEffect(() => {
-        const unsubscribe =
-            onAuthStateChanged(
-            auth,
-            async (user) => {
-                if (!user) return;
+            setRecentIncomes(
+              incomeData.slice(0, 3),
+            );
 
-                try {
-                const expenses =
-                    await getUserExpenses(
-                    user.uid,
-                    );
+            setRecentInvestments(
+              investmentData.slice(0, 3),
+            );
 
-                setRecentExpenses(
-                    expenses
-                    .slice(0, 3) as Expense[],
-                );
-                } catch (error) {
-                console.error(
-                    "Erro ao carregar gastos recentes:",
-                    error,
-                );
-                }
-            },
-        );
+            setTotalExpenses(
+              expenseData.reduce(
+                (sum, expense) =>
+                  sum + expense.amount,
+                0,
+              ),
+            );
+
+            setTotalIncome(
+              incomeData.reduce(
+                (sum, income) =>
+                  sum + income.amount,
+                0,
+              ),
+            );
+          } catch (error) {
+            console.error(
+              "Erro ao carregar dados do dashboard:",
+              error,
+            );
+          }
+        },
+      );
 
     return () => unsubscribe();
-    }, []);
+  }, []);
+
+  const balance =
+    totalIncome - totalExpenses;
+
+  const featuredInvestment =
+    recentInvestments[0];
+
+  const featuredProgress =
+    featuredInvestment?.goalAmount
+      ? Math.min(
+          (featuredInvestment.amount /
+            featuredInvestment.goalAmount) *
+            100,
+          100,
+        )
+      : 0;
+
+  const featuredRemaining =
+    featuredInvestment?.goalAmount
+      ? Math.max(
+          featuredInvestment.goalAmount -
+            featuredInvestment.amount,
+          0,
+        )
+      : 0;
 
   return (
     <main className={styles.content}>
-      <section className={styles.content__welcome}>
+      {/* BOAS-VINDAS */}
+      <section
+        className={
+          styles.content__welcome
+        }
+      >
         <div>
-          <span>Visão geral</span>
+          <span>
+            Visão geral
+          </span>
 
           <h1>
-            Bom dia, <strong>Bigodudo!</strong> 👋
+            Bem vindo,{" "}
+            <strong>
+              Sr(a) Bigodudo!
+            </strong>{" "}
+            👋
           </h1>
 
           <p>
-            Aqui está um resumo das suas finanças.
+            Aqui está um resumo das
+            suas finanças.
           </p>
         </div>
 
-        <button 
-            type="button"
-            onClick={() => navigate("/dashboard/expenses/new") }
-            className={styles.content__primaryAction}>
+        <button
+          type="button"
+          className={
+            styles.quickAction__income
+          }
+          onClick={() =>
+            navigate(
+              "/dashboard/incomes/new",
+            )
+          }
+        >
+          <MdAdd />
+
+          Nova entrada
+        </button>
+
+        <button
+          type="button"
+          onClick={() =>
+            navigate(
+              "/dashboard/expenses/new",
+            )
+          }
+          className={
+            styles.content__primaryAction
+          }
+        >
           + Novo gasto
         </button>
       </section>
 
-      <section className={styles.content__summary}>
-        <article className={styles.card}>
-          <span className={styles.card__label}>
+      {/* RESUMO */}
+      <section
+        className={
+          styles.content__summary
+        }
+      >
+        <article
+          className={styles.card}
+        >
+          <span
+            className={
+              styles.card__label
+            }
+          >
             Saldo disponível
           </span>
 
-          <strong className={styles.card__value}>
-            R$ 4.250,00
+          <strong
+            className={
+              styles.card__value
+            }
+          >
+            {formatCurrency(
+              balance,
+            )}
           </strong>
 
-          <span className={styles.card__positive}>
-            ↑ 8,4% este mês
+          <span
+            className={
+              balance >= 0
+                ? styles.card__positive
+                : styles.card__negative
+            }
+          >
+            {balance >= 0
+              ? "↑ Saldo positivo"
+              : "↓ Saldo negativo"}
           </span>
         </article>
 
-        <article className={styles.card}>
-          <span className={styles.card__label}>
+        <article
+          className={styles.card}
+        >
+          <span
+            className={
+              styles.card__label
+            }
+          >
             Receitas
           </span>
 
-          <strong className={styles.card__value}>
-            R$ 6.500,00
+          <strong
+            className={
+              styles.card__value
+            }
+          >
+            {formatCurrency(
+              totalIncome,
+            )}
           </strong>
 
-          <span className={styles.card__positive}>
-            ↑ 12,4% este mês
+          <span
+            className={
+              styles.card__positive
+            }
+          >
+            Entradas registradas
           </span>
         </article>
 
-        <article className={styles.card}>
-          <span className={styles.card__label}>
+        <article
+          className={styles.card}
+        >
+          <span
+            className={
+              styles.card__label
+            }
+          >
             Despesas
           </span>
 
-          <strong className={styles.card__value}>
-            R$ 2.250,00
+          <strong
+            className={
+              styles.card__value
+            }
+          >
+            {formatCurrency(
+              totalExpenses,
+            )}
           </strong>
 
-          <span className={styles.card__negative}>
-            ↓ 4,2% este mês
+          <span
+            className={
+              styles.card__negative
+            }
+          >
+            Gastos registrados
           </span>
         </article>
       </section>
 
-      <section className={styles.content__mainGrid}>
-        <article className={styles.planning}>
-          <div className={styles.sectionHeader}>
+      {/* PLANEJAMENTO EM DESTAQUE + PLANEJAMENTOS RECENTES */}
+      <section
+        className={
+          styles.content__mainGrid
+        }
+      >
+        {/* PLANEJAMENTO EM DESTAQUE */}
+        <article
+          className={styles.planning}
+        >
+          <div
+            className={
+              styles.sectionHeader
+            }
+          >
             <div>
-              <span className={styles.sectionHeader__label}>
-                Planejamento em destaque
+              <span
+                className={
+                  styles.sectionHeader__label
+                }
+              >
+                Planejamento em
+                destaque
               </span>
 
-              <h2>✈️ Viagem para o Chile</h2>
+              <h2>
+                {featuredInvestment
+                  ? `${getCategoryIcon(
+                      featuredInvestment.category,
+                    )} ${
+                      featuredInvestment.description
+                    }`
+                  : "🎯 Nenhum planejamento"}
+              </h2>
             </div>
 
-            <button>
+            <button
+              type="button"
+              onClick={() =>
+                navigate(
+                  "/dashboard/investments",
+                )
+              }
+            >
               Ver planejamento
             </button>
           </div>
 
-          <div className={styles.planning__amount}>
+          <div
+            className={
+              styles.planning__amount
+            }
+          >
             <strong>
-              R$ 5.240,00
+              {featuredInvestment
+                ? formatCurrency(
+                    featuredInvestment.amount,
+                  )
+                : "R$ 0,00"}
             </strong>
 
             <span>
-              de R$ 8.000,00
+              {featuredInvestment?.goalAmount
+                ? `de ${formatCurrency(
+                    featuredInvestment.goalAmount,
+                  )}`
+                : "Defina uma meta"}
             </span>
           </div>
 
-          <div className={styles.progress}>
+          <div
+            className={styles.progress}
+          >
             <div
-              className={styles.progress__bar}
-              style={{ width: "65%" }}
+              className={
+                styles.progress__bar
+              }
+              style={{
+                width: `${featuredProgress}%`,
+              }}
             />
           </div>
 
-          <div className={styles.planning__footer}>
-            <span>65% concluído</span>
+          <div
+            className={
+              styles.planning__footer
+            }
+          >
+            <span>
+              {featuredInvestment
+                ? `${featuredProgress.toLocaleString(
+                    "pt-BR",
+                    {
+                      maximumFractionDigits: 1,
+                    },
+                  )}% concluído`
+                : "Nenhum planejamento"}
+            </span>
 
             <strong>
-              Faltam R$ 2.760,00
+              {featuredInvestment?.goalAmount
+                ? featuredRemaining >
+                  0
+                  ? `Faltam ${formatCurrency(
+                      featuredRemaining,
+                    )}`
+                  : "Meta alcançada! 🎉"
+                : ""}
             </strong>
           </div>
         </article>
 
-        <article className={styles.categories}>
-          <div className={styles.sectionHeader}>
+        {/* PLANEJAMENTOS RECENTES */}
+        <article
+          className={
+            styles.investments
+          }
+        >
+          <div
+            className={
+              styles.sectionHeader
+            }
+          >
             <div>
-              <span className={styles.sectionHeader__label}>
-                Seus gastos
+              <span
+                className={
+                  styles.sectionHeader__label
+                }
+              >
+                Planejamentos
               </span>
 
-              <h2>Por categoria</h2>
+              <h2>
+                Metas recentes
+              </h2>
             </div>
 
-            <button>Ver todos</button>
+            <div
+              className={
+                styles.investments__actions
+              }
+            >
+              <button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    "/dashboard/investments/new",
+                  )
+                }
+              >
+                + Novo
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    "/dashboard/investments",
+                  )
+                }
+              >
+                Ver todos
+              </button>
+            </div>
           </div>
 
-          <div className={styles.categories__list}>
-            <div>
-              <span>
-                <i className={styles.categories__icon}>
-                  🍔
-                </i>
+          <div
+            className={
+              styles.investments__list
+            }
+          >
+            {recentInvestments.length ===
+            0 ? (
+              <div
+                className={
+                  styles.investment
+                }
+              >
+                <div
+                  className={
+                    styles.investment__icon
+                  }
+                >
+                  🎯
+                </div>
 
-                Alimentação
-              </span>
+                <div
+                  className={
+                    styles.investment__info
+                  }
+                >
+                  <strong>
+                    Nenhum planejamento
+                  </strong>
 
-              <strong>R$ 620,00</strong>
-            </div>
+                  <span>
+                    Crie uma meta para
+                    começar.
+                  </span>
+                </div>
+              </div>
+            ) : (
+              recentInvestments.map(
+                (investment) => {
+                  const progress =
+                    investment.goalAmount
+                      ? Math.min(
+                          (investment.amount /
+                            investment.goalAmount) *
+                            100,
+                          100,
+                        )
+                      : 0;
 
-            <div>
-              <span>
-                <i className={styles.categories__icon}>
-                  🚗
-                </i>
+                  return (
+                    <div
+                      key={
+                        investment.id
+                      }
+                      className={
+                        styles.investment
+                      }
+                    >
+                      <div
+                        className={
+                          styles.investment__icon
+                        }
+                      >
+                        {getCategoryIcon(
+                          investment.category,
+                        )}
+                      </div>
 
-                Transporte
-              </span>
+                      <div
+                        className={
+                          styles.investment__info
+                        }
+                      >
+                        <strong>
+                          {
+                            investment.description
+                          }
+                        </strong>
 
-              <strong>R$ 430,00</strong>
-            </div>
+                        <span>
+                          {formatCurrency(
+                            investment.amount,
+                          )}
 
-            <div>
-              <span>
-                <i className={styles.categories__icon}>
-                  🎮
-                </i>
+                          {investment.goalAmount
+                            ? ` de ${formatCurrency(
+                                investment.goalAmount,
+                              )}`
+                            : ""}
+                        </span>
+                      </div>
 
-                Lazer
-              </span>
-
-              <strong>R$ 280,00</strong>
-            </div>
-
-            <div>
-              <span>
-                <i className={styles.categories__icon}>
-                  🏠
-                </i>
-
-                Casa
-              </span>
-
-              <strong>R$ 920,00</strong>
-            </div>
+                      <strong
+                        className={
+                          styles.investment__amount
+                        }
+                      >
+                        {progress.toLocaleString(
+                          "pt-BR",
+                          {
+                            maximumFractionDigits: 1,
+                          },
+                        )}
+                        %
+                      </strong>
+                    </div>
+                  );
+                },
+              )
+            )}
           </div>
         </article>
       </section>
 
-      <section className={styles.recent}>
-        <div className={styles.sectionHeader}>
+      {/* ENTRADAS RECENTES */}
+      <section
+        className={styles.recent}
+      >
+        <div
+          className={
+            styles.sectionHeader
+          }
+        >
           <div>
-            <span className={styles.sectionHeader__label}>
+            <span
+              className={
+                styles.sectionHeader__label
+              }
+            >
               Histórico
             </span>
 
-            <h2>Gastos recentes</h2>
+            <h2>
+              Entradas recentes
+            </h2>
           </div>
 
           <button
             type="button"
             onClick={() =>
-                navigate("/dashboard/expenses")
-                }
-                >
-                Ver todos
-            </button>
+              navigate(
+                "/dashboard/incomes",
+              )
+            }
+          >
+            Ver todos
+          </button>
         </div>
 
-       {recentExpenses.map((expense) => (
+        {recentIncomes.length ===
+        0 ? (
+          <div
+            className={
+              styles.expense
+            }
+          >
             <div
-                key={expense.id}
-                className={styles.expense}
+              className={
+                styles.expense__icon
+              }
             >
-                <div className={styles.expense__icon}>
-                {getCategoryIcon(
-                    expense.category,
-                )}
-                </div>
-
-                <div className={styles.expense__info}>
-                <strong>
-                    {expense.description}
-                </strong>
-
-                <span>
-                    {formatDate(expense.date)}
-                </span>
-                </div>
-
-                <strong className={styles.expense__amount}>
-                -{" "}
-                {formatCurrency(
-                    expense.amount,
-                )}
-                </strong>
+              💰
             </div>
-            ))}
+
+            <div
+              className={
+                styles.expense__info
+              }
+            >
+              <strong>
+                Nenhuma entrada
+              </strong>
+
+              <span>
+                Cadastre sua primeira
+                entrada.
+              </span>
+            </div>
+          </div>
+        ) : (
+          recentIncomes.map(
+            (income) => (
+              <div
+                key={income.id}
+                className={
+                  styles.expense
+                }
+              >
+                <div
+                  className={
+                    styles.expense__icon
+                  }
+                >
+                  💰
+                </div>
+
+                <div
+                  className={
+                    styles.expense__info
+                  }
+                >
+                  <strong>
+                    {
+                      income.description
+                    }
+                  </strong>
+
+                  <span>
+                    {
+                      income.category
+                    }{" "}
+                    •{" "}
+                    {formatDate(
+                      income.date,
+                    )}
+                  </span>
+                </div>
+
+                <strong
+                  className={
+                    styles.income__amount
+                  }
+                >
+                  +{" "}
+                  {formatCurrency(
+                    income.amount,
+                  )}
+                </strong>
+              </div>
+            ),
+          )
+        )}
+      </section>
+
+      {/* GASTOS RECENTES */}
+      <section
+        className={styles.recent}
+      >
+        <div
+          className={
+            styles.sectionHeader
+          }
+        >
+          <div>
+            <span
+              className={
+                styles.sectionHeader__label
+              }
+            >
+              Histórico
+            </span>
+
+            <h2>
+              Gastos recentes
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={() =>
+              navigate(
+                "/dashboard/expenses",
+              )
+            }
+          >
+            Ver todos
+          </button>
+        </div>
+
+        {recentExpenses.length ===
+        0 ? (
+          <div
+            className={
+              styles.expense
+            }
+          >
+            <div
+              className={
+                styles.expense__icon
+              }
+            >
+              💸
+            </div>
+
+            <div
+              className={
+                styles.expense__info
+              }
+            >
+              <strong>
+                Nenhum gasto
+              </strong>
+
+              <span>
+                Seus gastos recentes
+                aparecerão aqui.
+              </span>
+            </div>
+          </div>
+        ) : (
+          recentExpenses.map(
+            (expense) => (
+              <div
+                key={expense.id}
+                className={
+                  styles.expense
+                }
+              >
+                <div
+                  className={
+                    styles.expense__icon
+                  }
+                >
+                  {getCategoryIcon(
+                    expense.category,
+                  )}
+                </div>
+
+                <div
+                  className={
+                    styles.expense__info
+                  }
+                >
+                  <strong>
+                    {
+                      expense.description
+                    }
+                  </strong>
+
+                  <span>
+                    {expense.category}{" "}
+                    •{" "}
+                    {formatDate(
+                      expense.date,
+                    )}
+                  </span>
+                </div>
+
+                <strong
+                  className={
+                    styles.expense__amount
+                  }
+                >
+                  -{" "}
+                  {formatCurrency(
+                    expense.amount,
+                  )}
+                </strong>
+              </div>
+            ),
+          )
+        )}
       </section>
     </main>
   );

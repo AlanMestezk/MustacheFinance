@@ -9,7 +9,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
-  updateDoc,
+  updateDoc
 } from "firebase/firestore";
 
 import { app } from "./config";
@@ -125,6 +125,152 @@ export const updateExpense = async (
     {
       description,
       amount,
+      category,
+      date,
+    },
+  );
+};
+
+export const createIncome = async (
+  uid: string,
+  description: string,
+  amount: number,
+  category: string,
+  date: Date,
+) => {
+  await addDoc(
+    collection(
+      db,
+      "users",
+      uid,
+      "incomes",
+    ),
+    {
+      description,
+      amount,
+      category,
+      date,
+      createdAt: serverTimestamp(),
+    },
+  );
+};
+
+export const getUserIncomes = async (
+  uid: string,
+) => {
+  const incomesRef = collection(
+    db,
+    "users",
+    uid,
+    "incomes",
+  );
+
+  const incomesQuery = query(
+    incomesRef,
+    orderBy("date", "desc"),
+  );
+
+  const snapshot = await getDocs(
+    incomesQuery,
+  );
+
+  return snapshot.docs.map(
+    (income) => ({
+      id: income.id,
+      ...income.data(),
+    }),
+  );
+};
+
+export const createInvestment = async (
+  uid: string,
+  description: string,
+  amount: number,
+  goalAmount: number,
+  category: string,
+  date: Date,
+) =>  {
+  await addDoc(
+    collection(
+      db,
+      "users",
+      uid,
+      "investments",
+    ),
+    {
+      description,
+  amount,
+  goalAmount,
+  category,
+  date,
+  createdAt: serverTimestamp(),
+    },
+  );
+};
+
+export const getUserInvestments = async (
+  uid: string,
+) => {
+  const investmentsRef = collection(
+    db,
+    "users",
+    uid,
+    "investments",
+  );
+
+  const investmentsQuery = query(
+    investmentsRef,
+    orderBy("date", "desc"),
+  );
+
+  const snapshot = await getDocs(
+    investmentsQuery,
+  );
+
+  return snapshot.docs.map(
+    (investment) => ({
+      id: investment.id,
+      ...investment.data(),
+    }),
+  );
+};
+
+export const deleteInvestment = async (
+  uid: string,
+  investmentId: string,
+) => {
+  await deleteDoc(
+    doc(
+      db,
+      "users",
+      uid,
+      "investments",
+      investmentId,
+    ),
+  );
+};
+
+export const updateInvestment = async (
+  uid: string,
+  investmentId: string,
+  description: string,
+  amount: number,
+  goalAmount: number,
+  category: string,
+  date: Date,
+) => {
+  await updateDoc(
+    doc(
+      db,
+      "users",
+      uid,
+      "investments",
+      investmentId,
+    ),
+    {
+      description,
+      amount,
+      goalAmount,
       category,
       date,
     },

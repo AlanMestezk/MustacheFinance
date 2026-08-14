@@ -1,9 +1,8 @@
 import {
   createUserWithEmailAndPassword,
   getAuth,
-  onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  signOut,
 } from "firebase/auth";
 
 import { app } from "./config";

@@ -2,63 +2,129 @@
   <img src="./src/assets/logo/logo.png" alt="Mustache Finance" width="400">
 </p>
 
-> Aplicação web para gerenciamento de finanças pessoais.
+<h1 align="center">Mustache Finance</h1>
 
-🚧 **Projeto em desenvolvimento**
+<p align="center">
+  A modern personal finance management application built with React, TypeScript and Firebase.
+</p>
 
-O **Mustache Finance** é um projeto pessoal desenvolvido com o objetivo de criar uma aplicação simples, moderna e robusta para controle de finanças pessoais.
-
-A proposta é permitir que o usuário acompanhe suas receitas, despesas, contas e objetivos financeiros através de uma interface intuitiva.
-
----
-
-## 🚀 Status do projeto
-
-O projeto está atualmente em desenvolvimento.
-
-### Atualmente
-
-- [x] Configuração inicial do projeto
-- [x] React + TypeScript + Vite
-- [x] React Router
-- [x] Estrutura inicial de componentes
-- [x] Identidade visual
-- [x] Header da Home
-- [ ] Landing Page
-- [ ] Tela de Login
-- [ ] Tela de Cadastro
-- [ ] Dashboard
-- [ ] Gerenciamento de contas
-- [ ] Gerenciamento de transações
-- [ ] Categorias
-- [ ] Metas financeiras
-- [ ] Relatórios
-- [ ] Autenticação
-- [ ] Backend
-- [ ] Banco de dados
-- [ ] Deploy
+<p align="center">
+  <a href="https://mustache-finance.vercel.app">Live Demo</a>
+  ·
+  <a href="#features">Features</a>
+  ·
+  <a href="#technologies">Technologies</a>
+  ·
+  <a href="#getting-started">Getting Started</a>
+</p>
 
 ---
 
-## 🛠️ Tecnologias
+## 📖 About
 
-### Front-end
+**Mustache Finance** is a personal finance management web application designed to make financial organization simple, visual and intuitive.
 
-- React
-- TypeScript
-- Vite
-- React Router
-- SCSS
-- CSS Modules
+The application allows users to keep track of their income and expenses, create personal financial plans, monitor progress toward goals and generate financial reports.
 
-### Futuramente
+The project was created as a personal development project focused on building a complete modern web application while exploring frontend architecture, authentication, cloud data management and deployment.
 
-- API REST
-- Banco de dados
-- Autenticação
-- Deploy
-
-<<<<<<< HEAD
-=======
 ---
->>>>>>> de9f9c76fc3ea83cc93fcae0befff42c27f88d39
+
+## ✨ Features
+
+### 💰 Income Management
+
+- Create income records
+- View income history
+- Edit existing income records
+- Delete income records
+- Categorize income
+- Automatic total calculation
+
+### 💸 Expense Management
+
+- Create expense records
+- View expense history
+- Edit existing expenses
+- Delete expenses
+- Categorize expenses
+- Automatic total calculation
+
+### 🎯 Financial Planning
+
+Create personal financial goals such as:
+
+- Buying a motorcycle
+- Planning a trip
+- Purchasing a computer
+- Saving for education
+- Other personal goals
+
+Each plan includes:
+
+- Current amount
+- Target amount
+- Progress percentage
+- Remaining amount
+- Category
+- Creation date
+- Visual progress bar
+
+### 📊 Dashboard
+
+The dashboard provides a quick overview of the user's financial situation, including:
+
+- Total income
+- Total expenses
+- Financial balance
+- Active financial plans
+- Goal progress
+- Top financial plans
+
+### 📄 Reports
+
+Users can generate financial reports based on a selected period and export the results as PDF.
+
+### 🔐 Authentication
+
+User authentication and profile management are handled through Firebase Authentication.
+
+Each user's financial data is isolated and stored under their own account.
+
+---
+
+## 🛠️ Technologies
+
+### Frontend
+
+- **React**
+- **TypeScript**
+- **Vite**
+- **React Router**
+- **SCSS**
+- **CSS Modules**
+- **React Icons**
+
+### Backend & Cloud
+
+- **Firebase Authentication**
+- **Firebase Firestore**
+
+### Deployment
+
+- **Vercel**
+
+---
+
+## 🏗️ Project Structure
+
+```text
+src/
+├── assets/
+├── components/
+├── firebase/
+├── pages/
+├── routes/
+├── styles/
+├── App.tsx
+└── main.tsx

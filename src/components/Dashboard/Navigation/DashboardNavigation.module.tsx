@@ -50,7 +50,7 @@ export const DashboardNavigation = () => {
         className={styles.navigation__item}
         onClick={() =>
           navigate(
-            "/dashboard/plans/new",
+            "/dashboard/investments/new",
           )
         }
       >
@@ -66,7 +66,7 @@ export const DashboardNavigation = () => {
         className={styles.navigation__item}
         onClick={() =>
           navigate(
-            "/dashboard/plans",
+            "/dashboard/investments",
           )
         }
       >

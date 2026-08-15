@@ -13,6 +13,7 @@ import { auth } from "../../../firebase/auth";
 import {
   deleteInvestment,
   getUserInvestments,
+  updateInvestment,
 } from "../../../firebase/firestore";
 
 import styles from "./styles/InvestmentList.module.scss";
@@ -45,6 +46,32 @@ export const InvestmentList = () => {
     investmentToDelete,
     setInvestmentToDelete,
   ] = useState<Investment | null>(null);
+
+  const [
+    investmentToEdit,
+    setInvestmentToEdit,
+  ] = useState<Investment | null>(null);
+
+  const [editDescription, setEditDescription] =
+    useState("");
+
+  const [editAmount, setEditAmount] =
+    useState("");
+
+  const [editGoalAmount, setEditGoalAmount] =
+    useState("");
+
+  const [editCategory, setEditCategory] =
+    useState("");
+
+  const [editDate, setEditDate] =
+    useState("");
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const [deleting, setDeleting] =
+    useState(false);
 
   useEffect(() => {
     const loadInvestments = async () => {
@@ -163,9 +190,7 @@ export const InvestmentList = () => {
   const getRemaining = (
     investment: Investment,
   ) => {
-    if (
-      !investment.goalAmount
-    ) {
+    if (!investment.goalAmount) {
       return 0;
     }
 
@@ -176,6 +201,10 @@ export const InvestmentList = () => {
     );
   };
 
+  /* =====================================================
+     EXCLUIR
+  ===================================================== */
+
   const handleDelete = (
     investment: Investment,
   ) => {
@@ -184,54 +213,250 @@ export const InvestmentList = () => {
     );
   };
 
-  const confirmDelete =
-    async () => {
-      if (!investmentToDelete) {
-        return;
-      }
+  const confirmDelete = async () => {
+    if (!investmentToDelete) {
+      return;
+    }
 
-      const user =
-        auth.currentUser;
+    const user = auth.currentUser;
 
-      if (!user) {
-        setError(
-          "Você precisa estar logado para excluir um planejamento.",
+    if (!user) {
+      setError(
+        "Você precisa estar logado para excluir um planejamento.",
+      );
+
+      setInvestmentToDelete(null);
+
+      return;
+    }
+
+    try {
+      setDeleting(true);
+
+      await deleteInvestment(
+        user.uid,
+        investmentToDelete.id,
+      );
+
+      setInvestments(
+        (current) =>
+          current.filter(
+            (investment) =>
+              investment.id !==
+              investmentToDelete.id,
+          ),
+      );
+
+      setInvestmentToDelete(null);
+    } catch (error) {
+      console.error(
+        "Erro ao excluir planejamento:",
+        error,
+      );
+
+      setError(
+        "Não foi possível excluir o planejamento.",
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  /* =====================================================
+     EDITAR
+  ===================================================== */
+
+  const handleEdit = (
+    investment: Investment,
+  ) => {
+    setInvestmentToEdit(
+      investment,
+    );
+
+    setEditDescription(
+      investment.description,
+    );
+
+    setEditAmount(
+      String(investment.amount),
+    );
+
+    setEditGoalAmount(
+      String(
+        investment.goalAmount ?? "",
+      ),
+    );
+
+    setEditCategory(
+      investment.category,
+    );
+
+    if (investment.date) {
+      const date =
+        new Date(
+          investment.date.seconds *
+            1000,
         );
 
-        setInvestmentToDelete(null);
+      const year =
+        date.getFullYear();
 
-        return;
-      }
+      const month =
+        String(
+          date.getMonth() + 1,
+        ).padStart(2, "0");
 
-      try {
-        await deleteInvestment(
-          user.uid,
-          investmentToDelete.id,
+      const day =
+        String(
+          date.getDate(),
+        ).padStart(2, "0");
+
+      setEditDate(
+        `${year}-${month}-${day}`,
+      );
+    } else {
+      setEditDate("");
+    }
+  };
+
+  const cancelEdit = () => {
+    setInvestmentToEdit(null);
+
+    setEditDescription("");
+    setEditAmount("");
+    setEditGoalAmount("");
+    setEditCategory("");
+    setEditDate("");
+    setError("");
+  };
+
+  const confirmEdit = async () => {
+    if (!investmentToEdit) {
+      return;
+    }
+
+    const user = auth.currentUser;
+
+    if (!user) {
+      setError(
+        "Você precisa estar logado para editar um planejamento.",
+      );
+
+      return;
+    }
+
+    if (
+      !editDescription.trim() ||
+      !editAmount ||
+      !editGoalAmount ||
+      !editCategory ||
+      !editDate
+    ) {
+      setError(
+        "Preencha todos os campos do planejamento.",
+      );
+
+      return;
+    }
+
+    const amount = Number(
+      editAmount.replace(",", "."),
+    );
+
+    const goalAmount = Number(
+      editGoalAmount.replace(",", "."),
+    );
+
+    if (
+      Number.isNaN(amount) ||
+      amount < 0
+    ) {
+      setError(
+        "Informe um valor atual válido.",
+      );
+
+      return;
+    }
+
+    if (
+      Number.isNaN(goalAmount) ||
+      goalAmount <= 0
+    ) {
+      setError(
+        "Informe uma meta válida.",
+      );
+
+      return;
+    }
+
+    if (amount > goalAmount) {
+      setError(
+        "O valor atual não pode ser maior que a meta.",
+      );
+
+      return;
+    }
+
+    try {
+      setSaving(true);
+      setError("");
+
+      const date =
+        new Date(
+          `${editDate}T12:00:00`,
         );
 
-        setInvestments(
-          (current) =>
-            current.filter(
-              (investment) =>
-                investment.id !==
-                investmentToDelete.id,
-            ),
-        );
+      await updateInvestment(
+        user.uid,
+        investmentToEdit.id,
+        editDescription.trim(),
+        amount,
+        goalAmount,
+        editCategory,
+        date,
+      );
 
-        setInvestmentToDelete(
-          null,
-        );
-      } catch (error) {
-        console.error(
-          "Erro ao excluir planejamento:",
-          error,
-        );
+      setInvestments(
+        (current) =>
+          current.map(
+            (investment) =>
+              investment.id ===
+              investmentToEdit.id
+                ? {
+                    ...investment,
+                    description:
+                      editDescription.trim(),
+                    amount,
+                    goalAmount,
+                    category:
+                      editCategory,
+                    date: {
+                      seconds:
+                        Math.floor(
+                          date.getTime() /
+                            1000,
+                        ),
+                      nanoseconds: 0,
+                    },
+                  }
+                : investment,
+          ),
+      );
 
-        setError(
-          "Não foi possível excluir o planejamento.",
-        );
-      }
-    };
+      cancelEdit();
+    } catch (error) {
+      console.error(
+        "Erro ao editar planejamento:",
+        error,
+      );
+
+      setError(
+        "Não foi possível editar o planejamento.",
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <main className={styles.page}>
@@ -561,8 +786,8 @@ export const InvestmentList = () => {
                               type="button"
                               title="Editar planejamento"
                               onClick={() =>
-                                navigate(
-                                  `/dashboard/investments/edit/${investment.id}`,
+                                handleEdit(
+                                  investment,
                                 )
                               }
                             >
@@ -590,6 +815,10 @@ export const InvestmentList = () => {
             )}
         </section>
       </section>
+
+      {/* =================================================
+          MODAL DE EXCLUSÃO
+      ================================================= */}
 
       {investmentToDelete && (
         <div
@@ -626,6 +855,7 @@ export const InvestmentList = () => {
                     null,
                   )
                 }
+                disabled={deleting}
               >
                 Cancelar
               </button>
@@ -635,8 +865,178 @@ export const InvestmentList = () => {
                 onClick={
                   confirmDelete
                 }
+                disabled={deleting}
               >
-                Excluir
+                {deleting
+                  ? "Excluindo..."
+                  : "Excluir"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =================================================
+          MODAL DE EDIÇÃO
+      ================================================= */}
+
+      {investmentToEdit && (
+        <div
+          className={
+            styles.modalOverlay
+          }
+        >
+          <div
+            className={styles.modal}
+          >
+            <h3>
+              Editar planejamento
+            </h3>
+
+            <div
+              className={
+                styles.modal__form
+              }
+            >
+              <label>
+                Nome do planejamento
+
+                <input
+                  type="text"
+                  value={
+                    editDescription
+                  }
+                  onChange={(event) =>
+                    setEditDescription(
+                      event.target.value,
+                    )
+                  }
+                />
+              </label>
+
+              <label>
+                Valor atual
+
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={
+                    editAmount
+                  }
+                  onChange={(event) =>
+                    setEditAmount(
+                      event.target.value,
+                    )
+                  }
+                />
+              </label>
+
+              <label>
+                Meta
+
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={
+                    editGoalAmount
+                  }
+                  onChange={(event) =>
+                    setEditGoalAmount(
+                      event.target.value,
+                    )
+                  }
+                />
+              </label>
+
+              <label>
+                Categoria
+
+                <select
+                  value={
+                    editCategory
+                  }
+                  onChange={(event) =>
+                    setEditCategory(
+                      event.target.value,
+                    )
+                  }
+                >
+                  <option value="">
+                    Selecione
+                  </option>
+
+                  <option value="Veículo">
+                    Veículo
+                  </option>
+
+                  <option value="Viagem">
+                    Viagem
+                  </option>
+
+                  <option value="Casa">
+                    Casa
+                  </option>
+
+                  <option value="Tecnologia">
+                    Tecnologia
+                  </option>
+
+                  <option value="Educação">
+                    Educação
+                  </option>
+
+                  <option value="Lazer">
+                    Lazer
+                  </option>
+
+                  <option value="Outros">
+                    Outros
+                  </option>
+                </select>
+              </label>
+
+              <label>
+                Data
+
+                <input
+                  type="date"
+                  value={
+                    editDate
+                  }
+                  onChange={(event) =>
+                    setEditDate(
+                      event.target.value,
+                    )
+                  }
+                />
+              </label>
+            </div>
+
+            <div
+              className={
+                styles.modal__actions
+              }
+            >
+              <button
+                type="button"
+                onClick={
+                  cancelEdit
+                }
+                disabled={saving}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                onClick={
+                  confirmEdit
+                }
+                disabled={saving}
+              >
+                {saving
+                  ? "Salvando..."
+                  : "Salvar"}
               </button>
             </div>
           </div>

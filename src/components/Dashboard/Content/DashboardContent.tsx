@@ -236,7 +236,7 @@ export const DashboardContent = () => {
           </span>
 
           <h1>
-            Bem vindo,{" "}
+            Bem vindo(a),{" "}
             <strong>
               Sr(a) Bigodudo!
             </strong>{" "}

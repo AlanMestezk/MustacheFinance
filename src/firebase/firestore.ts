@@ -9,7 +9,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 
 import { app } from "./config";
@@ -27,6 +27,10 @@ export const createUserProfile = async (
     createdAt: serverTimestamp(),
   });
 };
+
+/* =========================================================
+   GASTOS
+========================================================= */
 
 export const createExpense = async (
   uid: string,
@@ -131,6 +135,10 @@ export const updateExpense = async (
   );
 };
 
+/* =========================================================
+   ENTRADAS
+========================================================= */
+
 export const createIncome = async (
   uid: string,
   description: string,
@@ -182,6 +190,50 @@ export const getUserIncomes = async (
   );
 };
 
+export const deleteIncome = async (
+  uid: string,
+  incomeId: string,
+) => {
+  await deleteDoc(
+    doc(
+      db,
+      "users",
+      uid,
+      "incomes",
+      incomeId,
+    ),
+  );
+};
+
+export const updateIncome = async (
+  uid: string,
+  incomeId: string,
+  description: string,
+  amount: number,
+  category: string,
+  date: Date,
+) => {
+  await updateDoc(
+    doc(
+      db,
+      "users",
+      uid,
+      "incomes",
+      incomeId,
+    ),
+    {
+      description,
+      amount,
+      category,
+      date,
+    },
+  );
+};
+
+/* =========================================================
+   PLANEJAMENTOS
+========================================================= */
+
 export const createInvestment = async (
   uid: string,
   description: string,
@@ -189,7 +241,7 @@ export const createInvestment = async (
   goalAmount: number,
   category: string,
   date: Date,
-) =>  {
+) => {
   await addDoc(
     collection(
       db,
@@ -199,11 +251,11 @@ export const createInvestment = async (
     ),
     {
       description,
-  amount,
-  goalAmount,
-  category,
-  date,
-  createdAt: serverTimestamp(),
+      amount,
+      goalAmount,
+      category,
+      date,
+      createdAt: serverTimestamp(),
     },
   );
 };
